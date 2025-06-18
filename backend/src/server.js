@@ -34,4 +34,4 @@ connectDB().then(() => {
 });
 
 
-    //mongodb+srv://sidii0080:HejqkuandqmhmLhb@cluster0.ce2rgz0.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
+    

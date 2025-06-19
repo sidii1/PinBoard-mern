@@ -1,37 +1,38 @@
 import express from 'express';
-import notesRoutes from "./routes/notesRoutes.js";
-import { connectDB } from './config/db.js';
-import dotenv from 'dotenv';
+import path from 'path';
+import { fileURLToPath } from 'url';
 import cors from 'cors';
-dotenv.config();
+import dotenv from 'dotenv';
+import notesRoutes from './routes/notesRoutes.js';
+import { connectDB } from './config/db.js';
 
+dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Middleware
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Middlewares
 app.use(express.json());
-app.use(cors({
-    origin:"http://localhost:5173", // Adjust this to your frontend URL
-}))
-// Root route for testing
-app.get("/", (req, res) => {
-  res.send("API is running");
-});
+app.use(cors());
 
-// Notes API routes
-app.use("/api/notes", notesRoutes);
+// API Routes
+app.use('/api/notes', notesRoutes);
 
-// 404 fallback
-app.use((req, res) => {
-  res.status(404).json({ message: "Route not found" });
-});
+// Serve frontend static files
+if (process.env.NODE_ENV === 'production') {
+  const buildPath = path.join(__dirname, '../../frontend/NoteFrontendTemplate/dist');
+  app.use(express.static(buildPath));
 
-// Connect to DB and start server
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(buildPath, 'index.html'));
+  });
+}
+
+// Connect DB and start server
 connectDB().then(() => {
   app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
+    console.log(`Server running on http://localhost:${PORT}`);
   });
 });
-
-
-    

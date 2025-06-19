@@ -1,12 +1,15 @@
 #!/bin/bash
 
-echo "📦 Installing backend deps..."
+echo "📦 Installing backend dependencies..."
 npm install
 
-echo "📦 Installing frontend deps..."
+echo "📦 Installing frontend dependencies..."
 npm install --prefix ../frontend/NoteFrontendTemplate
 
 echo "🏗 Building React frontend..."
 npm run build --prefix ../frontend/NoteFrontendTemplate
 
-echo "✅ Build complete."
+echo "📁 Checking if build directory exists:"
+ls -la ../frontend/NoteFrontendTemplate/dist
+
+echo "✅ Build finished!"
